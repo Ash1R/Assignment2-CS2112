@@ -32,7 +32,7 @@ public class CipherFactory {
      * @param key the cipher's shift parameters. Note that a is a shift of 1.
      */
     public Cipher getVigenereCipher(String key) {
-        return null; // TODO implement
+        return new Vigenere(key.toLowerCase()); // TODO implement
     }
 
     /** Returns a new monoalphabetic substitution cipher with a randomly generated mapping. */
