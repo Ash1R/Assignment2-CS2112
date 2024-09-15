@@ -15,7 +15,7 @@ public class InputReader implements ChunkReader {
 
 
     public InputReader(InputStream stream, int chunkSize) {
-        this.stream = new InputStream(stream);
+        this.stream = stream;
         this.chunkSize = chunkSize;
     }
 
@@ -30,19 +30,22 @@ public class InputReader implements ChunkReader {
     }
 
     @Override
-    public int nextChunk(byte[] chunk) throws EOFException, IOException {
-        if (hasNext()) {
+    public int nextChunk(byte[] data) throws EOFException, IOException {
+        if (!hasNext()) {
             throw new EOFException("No more bytes available.");
         }
 
-        int bytesRead = stream.read(chunk, 0, chunkSize);
+        int bytesRead = stream.read(data, 1, chunkSize - 1);
 
         if (bytesRead == -1) {
             moreBytes = false;
             throw new EOFException("End of stream reached.");
         }
 
-        if (bytesRead < chunkSize) {
+        if (bytesRead < chunkSize - 1) {
+            for (int i = bytesRead + 1; i < chunkSize; i++) {
+                data[i] = 0;
+            }
             moreBytes = false;
         }
 
@@ -50,7 +53,7 @@ public class InputReader implements ChunkReader {
     }
 
     public void close() throws IOException {
-        inputStream.close();
+        stream.close();
     }
 
 }

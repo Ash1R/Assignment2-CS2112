@@ -42,7 +42,7 @@ public class CipherFactory {
 
     /** Returns a new RSA cipher with a randomly generated keys. */
     public Cipher getRSACipher() {
-        return null; // TODO implement
+        return new RSA(); // TODO implement
     }
 
     /**
@@ -53,6 +53,6 @@ public class CipherFactory {
      * @param d decryption key
      */
     public Cipher getRSACipher(BigInteger e, BigInteger n, BigInteger d) {
-        return null; // TODO implement
+        return new RSA(e, n, d); // TODO implement
     }
 }
