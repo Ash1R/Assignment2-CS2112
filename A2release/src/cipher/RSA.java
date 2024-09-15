@@ -67,21 +67,22 @@ public class RSA implements Cipher{
 
     @Override
     public String encrypt(String plaintext){
-        String encrypted = "";
+        /*String encrypted = "";
         byte[] currentChunk = new byte[127];
         InputReader reader = new InputReader(new ByteArrayInputStream((plaintext.getBytes())), 127);
         while (reader.hasNext()){
             int bytesRead = reader.nextChunk(currentChunk);
-            BigInteger chunkToDecrypt = new BigInteger(Arrays.copyOfRange(currentChunk, 1, (int)currentChunk[0]));
-            BigInteger cipherBigInt = chunkToDecrypt.modPow(e, n);
+            BigInteger chunkToEncrypt = new BigInteger(Arrays.copyOfRange(currentChunk, 1, (int)currentChunk[0]));
+            BigInteger cipherBigInt = chunkToEncrypt.modPow(e, n);
             encrypted += cipherBigInt.toString();
         }
-        return encrypted;
+        return encrypted; */
+        return "";
     }
 
     @Override
-    public String decrypt(String plaintext) throws IOException {
-        String decrypted = "";
+    public String decrypt(String plaintext){
+       /* String decrypted = "";
         byte[] currentChunk = new byte[127];
         InputReader reader = new InputReader(new ByteArrayInputStream((plaintext.getBytes())), 127);
         while (reader.hasNext()){
@@ -90,22 +91,23 @@ public class RSA implements Cipher{
             BigInteger cipherBigInt = chunkToDecrypt.modPow(d, n);
             decrypted += cipherBigInt.toString();
         }
-        return decrypted;
+        return decrypted; */
+        return "";
     }
 
     @Override
     public void save(OutputStream out) throws IOException {
 
-        out.write("RSA\n".getBytes());
+        out.write("RSA\n".getBytes("UTF-8"));
 
-        out.write(d.toString().getBytes());
-        out.write("\n".getBytes());
+        out.write(d.toString().getBytes("UTF-8"));
+        out.write("\n".getBytes("UTF-8"));
 
-        out.write(e.toString().getBytes());
-        out.write("\n".getBytes());
+        out.write(e.toString().getBytes("UTF-8"));
+        out.write("\n".getBytes("UTF-8"));
 
-        out.write(n.toString().getBytes());
-        out.write("\n".getBytes());
+        out.write(n.toString().getBytes("UTF-8"));
+        out.write("\n".getBytes("UTF-8"));
     }
 
 

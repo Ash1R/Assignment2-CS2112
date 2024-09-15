@@ -1,5 +1,11 @@
 package cipher;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.math.BigInteger;
+
 /**
  * Command line interface to allow users to interact with your ciphers.
  *
@@ -11,9 +17,8 @@ package cipher;
  * to add additional methods or alter the provided code to achieve this.
  */
 public class Main {
-
+    protected Cipher cipher;
     public static void main(String[] args) {
-        // TODO implement
     }
 
     /**
@@ -21,6 +26,7 @@ public class Main {
      * return the index into args just past any cipher type options.
      */
     private int parseCipherType(String[] args, int pos) throws IllegalArgumentException {
+        CipherFactory factory = new CipherFactory();
         // check if arguments are exhausted
         if (pos == args.length) return pos;
 
@@ -36,19 +42,50 @@ public class Main {
                 // TODO load a monoaphabetic substitution cipher from a file
                 break;
             case "--vigenere":
-                // TODO create a new Vigenere Cipher with the given key
+                cipher = factory.getVigenereCipher(args[pos++]);
                 break;
             case "--vigenereLoad":
-                // TODO create a Vigenere cipher with key loaded from the given file
+                try {
+                    BufferedReader reader = new BufferedReader(new FileReader(args[pos++]));
+                    String cipherType = reader.readLine();
+                    if (cipherType.equals("VIGNERE")){
+                        cipher = factory.getVigenereCipher(reader.readLine());
+                    } else{
+                        throw new IllegalArgumentException("Vignere not found");
+                    }
+
+                } catch (FileNotFoundException e){
+                    System.out.println("ERROR: Cipher file not found: " + e.getMessage());
+                } catch (IOException e){
+                    System.out.println("ERROR reading file: " + e.getMessage());
+                }
+
+
                 break;
             case "--rsa":
-                // TODO create new RSA cipher
+                cipher = factory.getRSACipher();
                 break;
             case "--rsaLoad":
-                // TODO load an RSA key from the given file
+                try {
+                    BufferedReader reader = new BufferedReader(new FileReader(args[pos++]));
+                    String cipherType = reader.readLine();
+                    if (cipherType.equals("RSA")){
+                        BigInteger d = new BigInteger(reader.readLine());
+                        BigInteger e = new BigInteger(reader.readLine());
+                        BigInteger n = new BigInteger(reader.readLine());
+
+                    } else{
+                        throw new IllegalArgumentException("Vignere not found");
+                    }
+
+                } catch (FileNotFoundException e){
+                    System.out.println("ERROR: Cipher file not found: " + e.getMessage());
+                } catch (IOException e){
+                    System.out.println("ERROR reading file: " + e.getMessage());
+                }
                 break;
             default:
-                // TODO
+                throw new IllegalArgumentException("Please specify a cipher type");
         }
         return pos;
     }
@@ -63,13 +100,13 @@ public class Main {
 
         switch (args[pos++]) {
             case "--em":
-                // TODO encrypt the given string
+                cipher.encrypt(args[pos++]);
                 break;
             case "--ef":
                 // TODO encrypt the contents of the given file
                 break;
             case "--dm":
-                // TODO decrypt the given string -- substitution ciphers only
+                cipher.decrypt(args[pos++]);
                 break;
             case "--df":
                 // TODO decrypt the contents of the given file
@@ -99,7 +136,7 @@ public class Main {
                     // TODO output result of applying the cipher to a file
                     break;
                 case "--save":
-                    // TODO save the cipher key to a file
+                    cipher.save()
                     break;
                 default:
                     // TODO

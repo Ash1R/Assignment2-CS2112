@@ -32,7 +32,7 @@ public class CipherFactory {
      * @param key the cipher's shift parameters. Note that a is a shift of 1.
      */
     public Cipher getVigenereCipher(String key) {
-        return new Vigenere(key.toLowerCase()); // TODO implement
+        return new Vigenere(key.toLowerCase());
     }
 
     /** Returns a new monoalphabetic substitution cipher with a randomly generated mapping. */
@@ -42,7 +42,7 @@ public class CipherFactory {
 
     /** Returns a new RSA cipher with a randomly generated keys. */
     public Cipher getRSACipher() {
-        return new RSA(); // TODO implement
+        return new RSA();
     }
 
     /**
@@ -53,6 +53,6 @@ public class CipherFactory {
      * @param d decryption key
      */
     public Cipher getRSACipher(BigInteger e, BigInteger n, BigInteger d) {
-        return new RSA(e, n, d); // TODO implement
+        return new RSA(e, n, d);
     }
 }
