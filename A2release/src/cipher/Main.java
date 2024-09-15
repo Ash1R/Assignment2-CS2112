@@ -1,9 +1,6 @@
 package cipher;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.math.BigInteger;
 
 /**
@@ -18,6 +15,7 @@ import java.math.BigInteger;
  */
 public class Main {
     protected Cipher cipher;
+    protected String cipherOutput;
     public static void main(String[] args) {
     }
 
@@ -73,9 +71,10 @@ public class Main {
                         BigInteger d = new BigInteger(reader.readLine());
                         BigInteger e = new BigInteger(reader.readLine());
                         BigInteger n = new BigInteger(reader.readLine());
+                        factory.getRSACipher(e, n, d);
 
                     } else{
-                        throw new IllegalArgumentException("Vignere not found");
+                        throw new IllegalArgumentException("RSA not found");
                     }
 
                 } catch (FileNotFoundException e){
@@ -100,16 +99,36 @@ public class Main {
 
         switch (args[pos++]) {
             case "--em":
-                cipher.encrypt(args[pos++]);
+                cipherOutput = cipher.encrypt(args[pos++]);
                 break;
             case "--ef":
                 // TODO encrypt the contents of the given file
+                try {
+                    InputStream in = new FileInputStream(args[pos++]);
+                    ByteArrayOutputStream out = new ByteArrayOutputStream();
+                    cipher.encrypt(in, out);
+                    cipherOutput = out.toString("UTF-8");
+                } catch (FileNotFoundException e) {
+                    System.out.println("ERROR file not found: " + e.getMessage());
+                } catch (IOException e) {
+                    System.out.println("ERROR reading input" + e.getMessage());
+                }
                 break;
             case "--dm":
-                cipher.decrypt(args[pos++]);
+                cipherOutput = cipher.decrypt(args[pos++]);
                 break;
             case "--df":
                 // TODO decrypt the contents of the given file
+                try {
+                    InputStream in = new FileInputStream(args[pos++]);
+                    ByteArrayOutputStream out = new ByteArrayOutputStream();
+                    cipher.decrypt(in, out);
+                    cipherOutput = out.toString("UTF-8");
+                } catch (FileNotFoundException e) {
+                    System.out.println("ERROR file not found: " + e.getMessage());
+                } catch (IOException e) {
+                    System.out.println("ERROR reading input" + e.getMessage());
+                }
                 break;
             default:
                 // TODO
@@ -126,17 +145,36 @@ public class Main {
         if (pos == args.length) return pos;
 
         String cmdFlag;
+
+        //potential file to write to
+        String filename;
+
         while (pos < args.length) {
             switch (cmdFlag = args[pos++]) {
                 case "--print":
                     // TODO print result of applying the cipher to the console -- substitution
                     // ciphers only
+                    System.out.println(cipherOutput);
                     break;
                 case "--out":
-                    // TODO output result of applying the cipher to a file
+                    filename = args[pos++];
+                    try {
+                        BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
+                        writer.write(cipherOutput);
+                    } catch (IOException e) {
+                        System.out.println("ERROR writing file:" + e.getMessage());
+                    }
                     break;
                 case "--save":
-                    cipher.save()
+                    filename = args[pos++];
+                    try {
+                        OutputStream out = new FileOutputStream(filename);
+                        cipher.save(out);
+                    } catch (FileNotFoundException e){
+                        System.out.println("ERROR: File not found: " + e.getMessage());
+                    } catch (IOException e) {
+                       System.out.println("ERROR reading file:" + e.getMessage());
+                    }
                     break;
                 default:
                     // TODO
