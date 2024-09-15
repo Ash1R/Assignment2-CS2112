@@ -45,7 +45,7 @@ public class Vigenere implements Cipher{
         return plaintext;
     }
 
-    
+    //THIS IS LITERALLY CHATGPT, I'LL WRITE THIS AGAIN MYSELF
     public char shifter(char inp, char shift) {
         int shiftedValue = ((int) inp - (int) 'a' + (int) shift - (int) 'a') % 26;
         return (char) ((int) 'a' + shiftedValue);  // Cast back to char after shifting
