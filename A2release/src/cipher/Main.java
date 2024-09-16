@@ -51,8 +51,9 @@ public class Main {
                 try {
                     BufferedReader reader = new BufferedReader(new FileReader(args[pos++]));
                     String cipherType = reader.readLine();
-                    if (cipherType.equals("VIGNERE")){
-                        cipher = factory.getVigenereCipher(reader.readLine());
+                    if (cipherType.equals("VIGENERE")){
+                        String key = reader.readLine();
+                        cipher = factory.getVigenereCipher(key);
                     } else{
                         throw new IllegalArgumentException("Vignere not found");
                     }
@@ -166,6 +167,8 @@ public class Main {
                     try {
                         BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
                         writer.write(cipherOutput);
+                        writer.flush();
+                        writer.close();
                     } catch (IOException e) {
                         System.out.println("ERROR writing file:" + e.getMessage());
                     }
