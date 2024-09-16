@@ -14,9 +14,14 @@ import java.math.BigInteger;
  * to add additional methods or alter the provided code to achieve this.
  */
 public class Main {
-    protected Cipher cipher;
-    protected String cipherOutput;
+    Cipher cipher;
+    String cipherOutput;
     public static void main(String[] args) {
+        int pos = 0;
+        Main program = new Main();
+        pos = program.parseCipherType(args, pos);
+        pos = program.parseCipherFunction(args, pos);
+        pos = program.parseOutputOptions(args, pos);
     }
 
     /**

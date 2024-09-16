@@ -4,6 +4,8 @@ import java.io.*;
 
 public class Vigenere implements Cipher {
 
+    public static int a_ASCII = 97;
+    public static int z_ASCII = 122;
     private String key;
 
     public Vigenere(String key) {
@@ -76,13 +78,27 @@ public class Vigenere implements Cipher {
 
     // Shift method using ASCII values for encryption
     public char shifter(char inp, char shift) {
-        int shiftAmt = (((int) inp - (int) 'a') + ((int) shift - (int) 'a')) % 26;
-        return (char) ((int) 'a' + shiftAmt);
+        if (inp == ' '){
+            return ' ';
+        }
+        int shiftAmt = (int)shift - (a_ASCII - 1);
+        int shifted = inp + shiftAmt;
+        if (shifted > z_ASCII){
+            shifted -= 26; //length of alphabet
+        }
+        return (char) shifted;
     }
 
     // Reverse shift method using ASCII values for decryption
     public char reverseShifter(char inp, char shift) {
-        int shiftAmt = (((int) inp - (int) 'a') - (((int) shift - (int) 'a')) + 26) % 26;
-        return (char) ((int) 'a' + shiftAmt);
+        if (inp == ' '){
+            return ' ';
+        }
+        int shiftAmt = (int)shift - (a_ASCII - 1);
+        int shifted = inp - shiftAmt;
+        if (shifted < a_ASCII){
+            shifted += 26; //length of alphabet
+        }
+        return (char)shifted;
     }
 }
