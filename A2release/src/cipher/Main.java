@@ -137,7 +137,8 @@ public class Main {
                 }
                 break;
             default:
-                // TODO
+                pos--;
+
         }
         return pos;
     }
@@ -175,6 +176,7 @@ public class Main {
                     break;
                 case "--save":
                     filename = args[pos++];
+                    System.out.println(filename);
                     try {
                         OutputStream out = new FileOutputStream(filename);
                         cipher.save(out);
@@ -185,6 +187,8 @@ public class Main {
                     }
                     break;
                 default:
+                    System.out.println(cmdFlag);
+
                     // TODO
             }
         }

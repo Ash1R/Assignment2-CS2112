@@ -17,7 +17,7 @@ public class RSA implements Cipher{
 
 
     public RSA(){
-        //p * q will be 1021-1022
+        //p * q will be 1021-1022 bits
         BigInteger q = new BigInteger(511, 20, new Random());
         BigInteger p = new BigInteger(511, 20, new Random());
         n = q.multiply(p);
@@ -108,6 +108,8 @@ public class RSA implements Cipher{
 
         out.write(n.toString().getBytes("UTF-8"));
         out.write("\n".getBytes("UTF-8"));
+        out.flush();
+        out.close();
     }
 
 
