@@ -45,7 +45,9 @@ public class RSA implements Cipher{
         InputReader reader = new InputReader(in, 127);
         while (reader.hasNext()){
             int bytesRead = reader.nextChunk(currentChunk);
-            BigInteger chunkToEncrypt = new BigInteger(Arrays.copyOfRange(currentChunk, 1, (int)currentChunk[0]));
+
+
+            BigInteger chunkToEncrypt = new BigInteger(Arrays.copyOfRange(currentChunk, 1, ((int)currentChunk[0]) + 2));
             BigInteger ciphertext = chunkToEncrypt.modPow(e, n);
             out.write(ciphertext.toByteArray());
         }

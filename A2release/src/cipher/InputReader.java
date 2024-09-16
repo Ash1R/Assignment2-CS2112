@@ -36,6 +36,13 @@ public class InputReader implements ChunkReader {
         }
 
         int bytesRead = stream.read(data, 1, chunkSize - 1);
+        System.out.println(bytesRead);
+        System.out.println(data[0]);
+        System.out.println(data[20]);
+
+
+        data[0] = (byte)bytesRead;
+
 
         if (bytesRead == -1) {
             moreBytes = false;

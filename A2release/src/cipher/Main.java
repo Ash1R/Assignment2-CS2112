@@ -77,7 +77,7 @@ public class Main {
                         BigInteger d = new BigInteger(reader.readLine());
                         BigInteger e = new BigInteger(reader.readLine());
                         BigInteger n = new BigInteger(reader.readLine());
-                        factory.getRSACipher(e, n, d);
+                        cipher = factory.getRSACipher(e, n, d);
 
                     } else{
                         throw new IllegalArgumentException("RSA not found");
@@ -187,7 +187,6 @@ public class Main {
                     }
                     break;
                 default:
-                    System.out.println(cmdFlag);
 
                     // TODO
             }
