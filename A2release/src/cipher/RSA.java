@@ -38,6 +38,10 @@ public class RSA implements Cipher{
         this.d = d;
     }
 
+    public BigInteger getD(){
+        return d;
+    }
+
     @Override
     public void encrypt(InputStream in, OutputStream out) throws IOException {
 
@@ -45,12 +49,25 @@ public class RSA implements Cipher{
         InputReader reader = new InputReader(in, 127);
         while (reader.hasNext()){
             int bytesRead = reader.nextChunk(currentChunk);
-
-
-            BigInteger chunkToEncrypt = new BigInteger(Arrays.copyOfRange(currentChunk, 1, ((int)currentChunk[0]) + 2));
+            System.out.println("range of chunk");
+            System.out.println(new String(Arrays.copyOfRange(currentChunk, 1, ((int)currentChunk[0]) + 1)));
+            BigInteger chunkToEncrypt = new BigInteger(Arrays.copyOfRange(currentChunk, 1, ((int)currentChunk[0]) + 1));
+            System.out.println("pre-encrypted int");
+            System.out.println(chunkToEncrypt);
+            System.out.println("reverse test");
+            System.out.println(new String(chunkToEncrypt.toByteArray()));
             BigInteger ciphertext = chunkToEncrypt.modPow(e, n);
+            BigInteger instantD = ciphertext.modPow(d, n);
+            System.out.println("instant decrypt");
+            System.out.println(new String(instantD.toByteArray()));
+            System.out.println("ciphertext");
+            System.out.println(ciphertext.toString());
+            System.out.println("Debug class output:");
+            Debug.show(ciphertext.toByteArray());
             out.write(ciphertext.toByteArray());
         }
+        out.close();
+
     }
 
     @Override
@@ -61,7 +78,7 @@ public class RSA implements Cipher{
 
         while (reader.hasNext()){
             int bytesRead = reader.nextChunk(currentChunk);
-            BigInteger chunkToDecrypt = new BigInteger(Arrays.copyOfRange(currentChunk, 1, (int)currentChunk[0]));
+            BigInteger chunkToDecrypt = new BigInteger(Arrays.copyOfRange(currentChunk, 1, (int)currentChunk[0] + 1));
             BigInteger cipherBigInt = chunkToDecrypt.modPow(d, n);
             out.write(cipherBigInt.toByteArray());
         }
@@ -79,7 +96,7 @@ public class RSA implements Cipher{
             encrypted += cipherBigInt.toString();
         }
         return encrypted; */
-        return "";
+        return d.toString();
     }
 
     @Override
@@ -94,7 +111,7 @@ public class RSA implements Cipher{
             decrypted += cipherBigInt.toString();
         }
         return decrypted; */
-        return "";
+        return n.toString();
     }
 
     @Override

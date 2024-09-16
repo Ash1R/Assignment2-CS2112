@@ -2,6 +2,8 @@ package cipher;
 
 import java.io.*;
 import java.math.BigInteger;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 /**
  * Command line interface to allow users to interact with your ciphers.
@@ -15,7 +17,7 @@ import java.math.BigInteger;
  */
 public class Main {
     Cipher cipher;
-    String cipherOutput;
+    ByteArrayOutputStream cipherOutput = new ByteArrayOutputStream();
     public static void main(String[] args) {
         int pos = 0;
         Main program = new Main();
@@ -77,6 +79,11 @@ public class Main {
                         BigInteger d = new BigInteger(reader.readLine());
                         BigInteger e = new BigInteger(reader.readLine());
                         BigInteger n = new BigInteger(reader.readLine());
+                        System.out.println("keys");
+                        System.out.println(d);
+                        System.out.println(e);
+                        System.out.println(n);
+
                         cipher = factory.getRSACipher(e, n, d);
 
                     } else{
@@ -105,15 +112,27 @@ public class Main {
 
         switch (args[pos++]) {
             case "--em":
-                cipherOutput = cipher.encrypt(args[pos++]);
+                try {
+                    cipherOutput.write(cipher.encrypt(args[pos++]).getBytes("UTF-8"));
+                } catch (IOException e) {
+                    System.out.println("ERROR writing file: " + e.getMessage());
+                }
                 break;
             case "--ef":
                 // TODO encrypt the contents of the given file
                 try {
                     InputStream in = new FileInputStream(args[pos++]);
-                    ByteArrayOutputStream out = new ByteArrayOutputStream();
-                    cipher.encrypt(in, out);
-                    cipherOutput = out.toString("UTF-8");
+                    //ByteArrayOutputStream out = new ByteArrayOutputStream();
+                    cipher.encrypt(in, cipherOutput);
+                    BigInteger temp = new BigInteger(cipherOutput.toByteArray());
+                    System.out.println("should be ciphertext");
+                    System.out.println(temp);
+                    BigInteger instantdecrypt = temp.modPow(new BigInteger(cipher.encrypt("")), new BigInteger(cipher.decrypt("")));
+                    System.out.println("decrypted int");
+                    System.out.println(instantdecrypt);
+                    System.out.println("decrypted");
+                    System.out.println(new String(instantdecrypt.toByteArray()));
+
                 } catch (FileNotFoundException e) {
                     System.out.println("ERROR file not found: " + e.getMessage());
                 } catch (IOException e) {
@@ -121,15 +140,19 @@ public class Main {
                 }
                 break;
             case "--dm":
-                cipherOutput = cipher.decrypt(args[pos++]);
+                try {
+                    cipherOutput.write(cipher.decrypt(args[pos++]).getBytes("UTF-8"));
+                } catch (IOException e) {
+                    System.out.println("ERROR writing file: " + e.getMessage());
+                }
                 break;
             case "--df":
                 // TODO decrypt the contents of the given file
                 try {
                     InputStream in = new FileInputStream(args[pos++]);
-                    ByteArrayOutputStream out = new ByteArrayOutputStream();
-                    cipher.decrypt(in, out);
-                    cipherOutput = out.toString("UTF-8");
+                    //ByteArrayOutputStream out = new ByteArrayOutputStream();
+                    cipher.decrypt(in, cipherOutput);
+                   // cipherOutput = out.toString("UTF-8");
                 } catch (FileNotFoundException e) {
                     System.out.println("ERROR file not found: " + e.getMessage());
                 } catch (IOException e) {
@@ -161,15 +184,35 @@ public class Main {
                 case "--print":
                     // TODO print result of applying the cipher to the console -- substitution
                     // ciphers only
-                    System.out.println(cipherOutput);
+                    try{
+                        System.out.println(cipherOutput.toString("UTF-8"));
+
+                    } catch (UnsupportedEncodingException e) {
+                        System.out.println("ERROR UTF-8 not supported: " + e.getMessage());
+                    }
                     break;
                 case "--out":
                     filename = args[pos++];
                     try {
-                        BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
-                        writer.write(cipherOutput);
+                        FileOutputStream fos = new FileOutputStream(filename);
+                        System.out.println("is it 128?");
+                        System.out.println(cipherOutput.toByteArray().length);
+                        fos.write(cipherOutput.toByteArray());
+                        //cipherOutput.writeTo(fos);
+                        fos.close();
+
+                        BigInteger originalCiphertext = new BigInteger(cipherOutput.toByteArray());
+                        BigInteger readCiphertext = new BigInteger(Files.readAllBytes(Path.of((filename))));
+                        String decrypted = new String(readCiphertext.modPow(new BigInteger(cipher.encrypt("")), new BigInteger(cipher.decrypt(""))).toByteArray());
+                        System.out.println("this should be the original text");
+                        System.out.println(decrypted);
+                        System.out.println("these should be identical");
+                        System.out.println(originalCiphertext);
+                        System.out.println(readCiphertext);
+                        /*BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
+                        writer.write(cipherOutput.toString());
                         writer.flush();
-                        writer.close();
+                        writer.close();*/
                     } catch (IOException e) {
                         System.out.println("ERROR writing file:" + e.getMessage());
                     }

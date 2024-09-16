@@ -2,7 +2,7 @@ package cipher;
 
 /** Display a byte array. For debugging purposes. */
 public class Debug {
-    static boolean DEBUG = false;
+    static boolean DEBUG = true;
 
     static void show(byte[] b) {
         if (!DEBUG) return;
