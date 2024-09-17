@@ -39,7 +39,7 @@ public abstract class AbstractCipher implements Cipher {
     }
 
     public char shifter(char inp, int shiftAmt) {
-        if (inp == ' '){
+        if (Character.isWhitespace(inp)){
             return ' ';
         }
         int shifted = inp + shiftAmt;
@@ -51,7 +51,7 @@ public abstract class AbstractCipher implements Cipher {
 
     // Reverse shift method using ASCII values for decryption
     public char reverseShifter(char inp, int shiftAmt) {
-        if (inp == ' '){
+        if (Character.isWhitespace(inp)){
             return ' ';
         }
         int shifted = inp - shiftAmt;
@@ -60,5 +60,16 @@ public abstract class AbstractCipher implements Cipher {
         }
         return (char)shifted;
     }
+
+    public static String filterNonAlphabetic(String input) {
+        String filtered = "";
+        for (char c : input.toCharArray()) {
+            if (Character.isLetter(c) || Character.isWhitespace(c)) {
+                filtered += c;
+            }
+        }
+        return filtered;
+    }
+
 
 }

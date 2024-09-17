@@ -15,7 +15,7 @@ public class Vigenere extends AbstractCipher implements Cipher {
 
     @Override
     public String encrypt(String plaintext) {
-        plaintext = plaintext.toLowerCase();
+        plaintext = filterNonAlphabetic(plaintext.toLowerCase());
         System.out.println("key");
         System.out.println(key);
         if (key.equals("")){
@@ -39,7 +39,7 @@ public class Vigenere extends AbstractCipher implements Cipher {
 
     @Override
     public String decrypt(String ciphertext) {
-        ciphertext = ciphertext.toLowerCase();
+        ciphertext = filterNonAlphabetic(ciphertext.toLowerCase());
         if (key.equals("")){
             return ciphertext;
         }

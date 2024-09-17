@@ -16,7 +16,11 @@ public class Caesar extends Mono implements Cipher{
     public String generateKey(int shift){
         String caesarKey = "";
         for (int i = 0; i < alphabet.length; i++){
-            caesarKey += shifter(alphabet[i], shift);
+            if (shift >= 0){
+                caesarKey += shifter(alphabet[i], shift);
+            } else {
+                caesarKey += reverseShifter(alphabet[i], -shift);
+            }
         }
         return caesarKey;
     }

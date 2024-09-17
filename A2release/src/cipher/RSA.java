@@ -97,32 +97,14 @@ public class RSA implements Cipher{
 
     @Override
     public String encrypt(String plaintext){
-        /*String encrypted = "";
-        byte[] currentChunk = new byte[127];
-        InputReader reader = new InputReader(new ByteArrayInputStream((plaintext.getBytes())), 127);
-        while (reader.hasNext()){
-            int bytesRead = reader.nextChunk(currentChunk);
-            BigInteger chunkToEncrypt = new BigInteger(Arrays.copyOfRange(currentChunk, 1, (int)currentChunk[0]));
-            BigInteger cipherBigInt = chunkToEncrypt.modPow(e, n);
-            encrypted += cipherBigInt.toString();
-        }
-        return encrypted; */
-        throw new IllegalArgumentException("RSA input must be read from a file!");
+        System.out.println("ERROR: RSA input must be read from a file! Returning empty string...");
+        return "";
     }
 
     @Override
     public String decrypt(String plaintext){
-       /* String decrypted = "";
-        byte[] currentChunk = new byte[127];
-        InputReader reader = new InputReader(new ByteArrayInputStream((plaintext.getBytes())), 127);
-        while (reader.hasNext()){
-            int bytesRead = reader.nextChunk(currentChunk);
-            BigInteger chunkToDecrypt = new BigInteger(Arrays.copyOfRange(currentChunk, 1, (int)currentChunk[0]));
-            BigInteger cipherBigInt = chunkToDecrypt.modPow(d, n);
-            decrypted += cipherBigInt.toString();
-        }
-        return decrypted; */
-        throw new IllegalArgumentException("RSA input must be read from a file!");
+        System.out.println("ERROR: RSA input must be read from a file! Returning empty string...");
+        return "";
 
     }
 

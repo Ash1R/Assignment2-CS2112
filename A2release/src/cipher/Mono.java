@@ -12,10 +12,10 @@ public class Mono extends AbstractCipher implements Cipher{
 
     @Override
     public String encrypt(String plaintext){
-        plaintext = plaintext.toLowerCase();
+        plaintext = filterNonAlphabetic(plaintext.toLowerCase());
         String ciphertext = "";
         for (int i = 0; i < plaintext.length(); i++){
-            if (plaintext.charAt(i) == ' '){
+            if (Character.isWhitespace(plaintext.charAt(i))){
                 ciphertext += ' ';
             } else{
                 //convenient use of ascii values
@@ -27,10 +27,10 @@ public class Mono extends AbstractCipher implements Cipher{
 
     @Override
     public String decrypt(String ciphertext){
-        ciphertext = ciphertext.toLowerCase();
+        ciphertext = filterNonAlphabetic(ciphertext.toLowerCase());
         String plaintext = "";
         for (int i = 0; i < ciphertext.length(); i++){
-            if (ciphertext.charAt(i) == ' '){
+            if (Character.isWhitespace(ciphertext.charAt(i))){
                 plaintext += ' ';
             } else{
                  //find position of character in encrAlph
