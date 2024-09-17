@@ -47,7 +47,9 @@ public class RSA implements Cipher{
 
         byte[] currentChunk = new byte[127];
         InputReader reader = new InputReader(in, 127);
+        int counter = 0;
         while (reader.hasNext()){
+            System.out.println(counter++);
             int bytesRead = reader.nextChunk(currentChunk);
             if (bytesRead == 0){
                 break;
@@ -59,12 +61,8 @@ public class RSA implements Cipher{
 
             BigInteger ciphertext = chunkToEncrypt.modPow(e, n);
             BigInteger instantD = ciphertext.modPow(d, n);
-            System.out.println("Check ciphertext array size: " + ciphertext.toByteArray().length);
             System.out.println("After Encryption Integer");
             System.out.println(ciphertext);
-            System.out.println("length of ciphertext bytearray");
-            System.out.println(ciphertext.toByteArray().length);
-            Debug.show(ciphertext.toByteArray());
             out.write(ciphertext.toByteArray());
         }
         out.close();
@@ -76,9 +74,9 @@ public class RSA implements Cipher{
 
         byte[] currentChunk = new byte[128];
         EncryptedBytesReader reader = new EncryptedBytesReader(in, 128);
-
+        int counter = 0;
         while (reader.hasNext()){
-            System.out.println("CALLING");
+            System.out.println(counter++);
             int bytesRead = reader.nextChunk(currentChunk);
             if (bytesRead == 0){
                 break;

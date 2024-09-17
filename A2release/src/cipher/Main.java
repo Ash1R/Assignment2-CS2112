@@ -144,6 +144,8 @@ public class Main {
                     cipherOutput.write(cipher.decrypt(args[pos++]).getBytes("UTF-8"));
                 } catch (IOException e) {
                     System.out.println("ERROR writing file: " + e.getMessage());
+                } catch (NullPointerException e){
+                    System.out.println("Cipher not found! Make sure you are loading from the right file, or one that exists.");
                 }
                 break;
             case "--df":
@@ -221,7 +223,11 @@ public class Main {
                     System.out.println(filename);
                     try {
                         OutputStream out = new FileOutputStream(filename);
-                        cipher.save(out);
+                        try {
+                            cipher.save(out);
+                        } catch (NullPointerException e){
+                            System.out.println("ERROR: Cipher not found! Make sure you loaded the cipher correctly.");
+                        }
                     } catch (FileNotFoundException e){
                         System.out.println("ERROR: File not found: " + e.getMessage());
                     } catch (IOException e) {
