@@ -2,7 +2,7 @@ package cipher;
 
 import java.io.*;
 
-public abstract class Mono implements cipher{
+public abstract class Mono implements Cipher{
 
     public static String[] alphabet = new String[]{"a", "b", "c", "d", "e", "f", "g",
             "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "q",

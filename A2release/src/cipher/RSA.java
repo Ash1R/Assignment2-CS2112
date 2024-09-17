@@ -107,7 +107,7 @@ public class RSA implements Cipher{
             encrypted += cipherBigInt.toString();
         }
         return encrypted; */
-        return d.toString();
+        throw new IllegalArgumentException("RSA input must be read from a file!");
     }
 
     @Override
@@ -122,7 +122,8 @@ public class RSA implements Cipher{
             decrypted += cipherBigInt.toString();
         }
         return decrypted; */
-        return n.toString();
+        throw new IllegalArgumentException("RSA input must be read from a file!");
+
     }
 
     @Override

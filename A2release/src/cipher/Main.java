@@ -124,10 +124,10 @@ public class Main {
                     InputStream in = new FileInputStream(args[pos++]);
                     //ByteArrayOutputStream out = new ByteArrayOutputStream();
                     cipher.encrypt(in, cipherOutput);
-                    BigInteger temp = new BigInteger(cipherOutput.toByteArray());
+                    //BigInteger temp = new BigInteger(cipherOutput.toByteArray());
                    // System.out.println("should be ciphertext");
                    // System.out.println(temp);
-                    BigInteger instantdecrypt = temp.modPow(new BigInteger(cipher.encrypt("")), new BigInteger(cipher.decrypt("")));
+                    //BigInteger instantdecrypt = temp.modPow(new BigInteger(cipher.encrypt("")), new BigInteger(cipher.decrypt("")));
                    // System.out.println("decrypted int");
                   //  System.out.println(instantdecrypt);
                 //    System.out.println("decrypted");

@@ -46,11 +46,22 @@ public class Vigenere implements Cipher {
     @Override
     public String encrypt(String plaintext) {
         plaintext = plaintext.toLowerCase();
+        System.out.println("key");
+        System.out.println(key);
+        if (key.equals("")){
+            return plaintext;
+        }
+
         String ciphertext = "";
+        int charParsedCount = 0;
         for (int i = 0; i < plaintext.length(); i++) {
             char plainChar = plaintext.charAt(i);
-            char keyChar = key.charAt(i % key.length());
+            char keyChar = key.charAt(charParsedCount % key.length());
+            System.out.println(charParsedCount % key.length());
             char encryptedChar = shifter(plainChar, keyChar);
+            if (encryptedChar != ' '){
+                charParsedCount++;
+            }
             ciphertext += encryptedChar;
         }
         return ciphertext;
@@ -59,11 +70,18 @@ public class Vigenere implements Cipher {
     @Override
     public String decrypt(String ciphertext) {
         ciphertext = ciphertext.toLowerCase();
+        if (key.equals("")){
+            return ciphertext;
+        }
         String plaintext = "";
+        int charParsedCount = 0;
         for (int i = 0; i < ciphertext.length(); i++) {
             char cipherChar = ciphertext.charAt(i);
-            char keyChar = key.charAt(i % key.length());
+            char keyChar = key.charAt(charParsedCount % key.length());
             char decryptedChar = reverseShifter(cipherChar, keyChar);
+            if (decryptedChar != ' '){
+                charParsedCount++;
+            }
             plaintext += decryptedChar;
         }
         return plaintext;

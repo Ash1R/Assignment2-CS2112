@@ -14,7 +14,8 @@ public class Caesar extends Mono{
         }
     }
 
-    public void encryptFile(InputStream in, OutputStream out) throws IOException {
+    @Override
+    public void encrypt(InputStream in, OutputStream out) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
         String plainText = "";
 
@@ -24,11 +25,12 @@ public class Caesar extends Mono{
             currentLine = reader.readLine();
         }
 
-        String ciphertext = encrypt(plainText, shifter);
+        String ciphertext = encrypt(plainText);
         out.write(ciphertext.getBytes("UTF-8"));
     }
 
-    public void decryptFile(InputStream in, OutputStream out) throws IOException {
+    @Override
+    public void decrypt(InputStream in, OutputStream out) throws IOException {
         // Use InputStreamReader with UTF-8 encoding
         BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
         String cipherText = "";
@@ -39,11 +41,12 @@ public class Caesar extends Mono{
             currentLine = reader.readLine();
         }
 
-        String plaintext = decrypt(cipherText, shifter);
+        String plaintext = decrypt(cipherText);
         out.write(plaintext.getBytes("UTF-8"));
     }
 
-    public String encrypt(String plainText, int shifter){
+    @Override
+    public String encrypt(String plainText){
         plainText = plainText.toLowerCase();
         String cipherText = "";
         for (int i = 0; i < plainText.length(); i++){
@@ -53,7 +56,8 @@ public class Caesar extends Mono{
         return cipherText;
     }
 
-    public String decrypt(String cipherText, int shifter){
+    @Override
+    public String decrypt(String cipherText){
         cipherText = cipherText.toLowerCase();
         String plainText = "";
         for(int i = 0; i < cipherText.length(); i++){
@@ -69,6 +73,7 @@ public class Caesar extends Mono{
         return plainText;
     }
 
+    @Override
     public void save(OutputStream out) throws IOException {
         out.write("MONO\n".getBytes("UTF-8"));
         String key = "";
