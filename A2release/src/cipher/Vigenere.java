@@ -16,8 +16,6 @@ public class Vigenere extends AbstractCipher implements Cipher {
     @Override
     public String encrypt(String plaintext) {
         plaintext = filterNonAlphabetic(plaintext.toLowerCase());
-        System.out.println("key");
-        System.out.println(key);
         if (key.equals("")){
             return plaintext;
         }
@@ -27,7 +25,6 @@ public class Vigenere extends AbstractCipher implements Cipher {
         for (int i = 0; i < plaintext.length(); i++) {
             char plainChar = plaintext.charAt(i);
             char keyChar = key.charAt(charParsedCount % key.length());
-            System.out.println(charParsedCount % key.length());
             char encryptedChar = shifter(plainChar, (int)keyChar - (a_ASCII - 1));
             if (encryptedChar != ' '){
                 charParsedCount++;
