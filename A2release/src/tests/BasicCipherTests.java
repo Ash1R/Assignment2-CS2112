@@ -12,12 +12,12 @@ public class BasicCipherTests {
 
     private final CipherFactory cipherFactory = new CipherFactory();
 
-    /*@Test
+    @Test
     void testBasicCaesar() {
         Cipher caesar = cipherFactory.getCaesarCipher(5);
         assertEquals("wmnst", caesar.encrypt("rhino"));
         assertEquals("btrgfy", caesar.encrypt("wombat"));
-    } */
+    }
 
     @Test
     void testBasicVigenere() {
@@ -26,22 +26,22 @@ public class BasicCipherTests {
         assertEquals("uqpptupy", vigenere.encrypt("tomorrow"));
 
         Cipher vigenere2 = cipherFactory.getVigenereCipher("abc");
-        assertEquals("", vigenere.encrypt(""));
+        assertEquals("", vigenere2.encrypt(""));
 
         Cipher vigenere3 = cipherFactory.getVigenereCipher("");
-        assertEquals("hello", vigenere.encrypt("hello"));
+        assertEquals("hello", vigenere3.encrypt("hello"));
 
 
 
     }
 
-    /*@Test
+    @Test
     void testBasicRandom() {
         Cipher random = cipherFactory.getRandomSubstitutionCipher();
         String s = "albatross";
         assertEquals(s, random.decrypt(random.encrypt(s)));
         assertEquals(s, random.encrypt(random.decrypt(s)));
-    }*/
+    }
 
     @Test
     void testBasicRSA() throws Exception {

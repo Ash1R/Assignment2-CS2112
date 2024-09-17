@@ -16,7 +16,7 @@ public class CipherFactory {
      * @param encrAlph the encrypted alphabet
      */
     public Cipher getMonoCipher(String encrAlph) {
-        return null; // TODO implement
+        return new Mono(encrAlph); // TODO implement
     }
 
     /**
@@ -25,7 +25,7 @@ public class CipherFactory {
      * @param shift the cipher's shift parameter
      */
     public Cipher getCaesarCipher(int shift) {
-        return null; // TODO implement
+        return new Caesar(shift); // TODO implement
     }
 
     /**
@@ -39,7 +39,7 @@ public class CipherFactory {
 
     /** Returns a new monoalphabetic substitution cipher with a randomly generated mapping. */
     public Cipher getRandomSubstitutionCipher() {
-        return null; // TODO implement
+        return new Random();
     }
 
     /** Returns a new RSA cipher with a randomly generated keys. */
