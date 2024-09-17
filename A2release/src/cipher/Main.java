@@ -79,10 +79,10 @@ public class Main {
                         BigInteger d = new BigInteger(reader.readLine());
                         BigInteger e = new BigInteger(reader.readLine());
                         BigInteger n = new BigInteger(reader.readLine());
-                        System.out.println("keys");
-                        System.out.println(d);
-                        System.out.println(e);
-                        System.out.println(n);
+                        //System.out.println("keys");
+                        //System.out.println(d);
+                        //System.out.println(e);
+                        //System.out.println(n);
 
                         cipher = factory.getRSACipher(e, n, d);
 
@@ -125,13 +125,13 @@ public class Main {
                     //ByteArrayOutputStream out = new ByteArrayOutputStream();
                     cipher.encrypt(in, cipherOutput);
                     BigInteger temp = new BigInteger(cipherOutput.toByteArray());
-                    System.out.println("should be ciphertext");
-                    System.out.println(temp);
+                   // System.out.println("should be ciphertext");
+                   // System.out.println(temp);
                     BigInteger instantdecrypt = temp.modPow(new BigInteger(cipher.encrypt("")), new BigInteger(cipher.decrypt("")));
-                    System.out.println("decrypted int");
-                    System.out.println(instantdecrypt);
-                    System.out.println("decrypted");
-                    System.out.println(new String(instantdecrypt.toByteArray()));
+                   // System.out.println("decrypted int");
+                  //  System.out.println(instantdecrypt);
+                //    System.out.println("decrypted");
+                  //  System.out.println(new String(instantdecrypt.toByteArray()));
 
                 } catch (FileNotFoundException e) {
                     System.out.println("ERROR file not found: " + e.getMessage());
@@ -150,9 +150,10 @@ public class Main {
                 // TODO decrypt the contents of the given file
                 try {
                     InputStream in = new FileInputStream(args[pos++]);
-                    //ByteArrayOutputStream out = new ByteArrayOutputStream();
+                    //byte[] inputStreamBytes = new byte[128];
+                    //int throwaway = in.read(inputStreamBytes, 0, 128);
+                    //Debug.show(inputStreamBytes);
                     cipher.decrypt(in, cipherOutput);
-                   // cipherOutput = out.toString("UTF-8");
                 } catch (FileNotFoundException e) {
                     System.out.println("ERROR file not found: " + e.getMessage());
                 } catch (IOException e) {
@@ -195,20 +196,18 @@ public class Main {
                     filename = args[pos++];
                     try {
                         FileOutputStream fos = new FileOutputStream(filename);
-                        System.out.println("is it 128?");
-                        System.out.println(cipherOutput.toByteArray().length);
                         fos.write(cipherOutput.toByteArray());
                         //cipherOutput.writeTo(fos);
                         fos.close();
 
-                        BigInteger originalCiphertext = new BigInteger(cipherOutput.toByteArray());
-                        BigInteger readCiphertext = new BigInteger(Files.readAllBytes(Path.of((filename))));
-                        String decrypted = new String(readCiphertext.modPow(new BigInteger(cipher.encrypt("")), new BigInteger(cipher.decrypt(""))).toByteArray());
-                        System.out.println("this should be the original text");
-                        System.out.println(decrypted);
-                        System.out.println("these should be identical");
-                        System.out.println(originalCiphertext);
-                        System.out.println(readCiphertext);
+                        //BigInteger originalCiphertext = new BigInteger(cipherOutput.toByteArray());
+                        //BigInteger readCiphertext = new BigInteger(Files.readAllBytes(Path.of((filename))));
+                        //String decrypted = new String(readCiphertext.modPow(new BigInteger(cipher.encrypt("")), new BigInteger(cipher.decrypt(""))).toByteArray());
+                        //System.out.println("this should be the original text");
+                        //System.out.println(decrypted);
+                        //System.out.println("these should be identical");
+                        //System.out.println(originalCiphertext);
+                        //System.out.println(readCiphertext);
                         /*BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
                         writer.write(cipherOutput.toString());
                         writer.flush();

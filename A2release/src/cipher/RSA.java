@@ -49,20 +49,21 @@ public class RSA implements Cipher{
         InputReader reader = new InputReader(in, 127);
         while (reader.hasNext()){
             int bytesRead = reader.nextChunk(currentChunk);
-            System.out.println("range of chunk");
-            System.out.println(new String(Arrays.copyOfRange(currentChunk, 1, ((int)currentChunk[0]) + 1)));
-            BigInteger chunkToEncrypt = new BigInteger(Arrays.copyOfRange(currentChunk, 1, ((int)currentChunk[0]) + 1));
-            System.out.println("pre-encrypted int");
+            if (bytesRead == 0){
+                break;
+            }
+
+            BigInteger chunkToEncrypt = new BigInteger(currentChunk);
+            System.out.println("Pre-Encryption Integer");
             System.out.println(chunkToEncrypt);
-            System.out.println("reverse test");
-            System.out.println(new String(chunkToEncrypt.toByteArray()));
+
             BigInteger ciphertext = chunkToEncrypt.modPow(e, n);
             BigInteger instantD = ciphertext.modPow(d, n);
-            System.out.println("instant decrypt");
-            System.out.println(new String(instantD.toByteArray()));
-            System.out.println("ciphertext");
-            System.out.println(ciphertext.toString());
-            System.out.println("Debug class output:");
+            System.out.println("Check ciphertext array size: " + ciphertext.toByteArray().length);
+            System.out.println("After Encryption Integer");
+            System.out.println(ciphertext);
+            System.out.println("length of ciphertext bytearray");
+            System.out.println(ciphertext.toByteArray().length);
             Debug.show(ciphertext.toByteArray());
             out.write(ciphertext.toByteArray());
         }
@@ -73,14 +74,24 @@ public class RSA implements Cipher{
     @Override
     public void decrypt(InputStream in, OutputStream out) throws IOException {
 
-        byte[] currentChunk = new byte[127];
-        InputReader reader = new InputReader(in, 127);
+        byte[] currentChunk = new byte[128];
+        EncryptedBytesReader reader = new EncryptedBytesReader(in, 128);
 
         while (reader.hasNext()){
+            System.out.println("CALLING");
             int bytesRead = reader.nextChunk(currentChunk);
-            BigInteger chunkToDecrypt = new BigInteger(Arrays.copyOfRange(currentChunk, 1, (int)currentChunk[0] + 1));
-            BigInteger cipherBigInt = chunkToDecrypt.modPow(d, n);
-            out.write(cipherBigInt.toByteArray());
+            if (bytesRead == 0){
+                break;
+            }
+            BigInteger chunkToDecrypt = new BigInteger(currentChunk);
+            System.out.println("chunk before decrypting");
+            System.out.println(chunkToDecrypt);
+            BigInteger decodedBigInteger = chunkToDecrypt.modPow(d, n);
+            System.out.println("Decoded Integer");
+            System.out.println(decodedBigInteger);
+            byte[] decodedByteArray = decodedBigInteger.toByteArray();
+
+            out.write(Arrays.copyOfRange(decodedByteArray, 1, (int)decodedByteArray[0] + 1));
         }
     }
 

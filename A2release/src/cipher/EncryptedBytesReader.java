@@ -7,14 +7,14 @@ import java.io.EOFException;
 import java.io.Reader;
 
 
-public class InputReader implements ChunkReader {
+public class EncryptedBytesReader implements ChunkReader {
 
     private final InputStream stream;
     private final int chunkSize;
     private boolean moreBytes = true;
 
 
-    public InputReader(InputStream stream, int chunkSize) {
+    public EncryptedBytesReader(InputStream stream, int chunkSize) {
         this.stream = stream;
         this.chunkSize = chunkSize;
     }
@@ -35,24 +35,20 @@ public class InputReader implements ChunkReader {
             throw new EOFException("No more bytes available.");
         }
 
-        int bytesRead = stream.read(data, 1, chunkSize - 1);
-
-
-
-
-        data[0] = (byte)bytesRead;
-
+        int bytesRead = stream.read(data, 0, chunkSize);
 
         if (bytesRead == -1) {
             moreBytes = false;
             return 0;
         }
 
-        if (bytesRead < chunkSize - 1 && moreBytes) {
-            for (int i = bytesRead + 1; i < chunkSize; i++) {
-                data[i] = 0;
+        if (bytesRead < chunkSize && moreBytes){
+            byte[] newArray = new byte[chunkSize];
+            for (int i = 0; i < chunkSize - bytesRead; i++){
+                newArray[i] = 0;
             }
-            moreBytes = false;
+            System.arraycopy(data, 0, newArray, chunkSize - bytesRead, bytesRead);
+            System.arraycopy(newArray, 0, data, 0, chunkSize);
         }
 
         return bytesRead;

@@ -1,4 +1,1 @@
-œN¯/¤î™¶f°eÊ*@ø1ŠwYà ¡får“E_}EC‰Ï×ç^K¤á ÞlYì‡ƒôaŒ²–ÿîÖŽcnÄš[hDÒæŠ¢úªHõR-øOè. 
-+-è]"«2i–Åê-
-À¸Ö2{sÛœé;å0ô–¼$Æ$t%%ˆ§¶`A,1æDä“¸Þ·ÎhhßÂâ$1HA5û{¨/ïÜ±q/kQ@oï¹aÈ,°Ä€VmZ<ÞÎ@2m‰‹ßÇ…ê‡õñP¾"S£m"|é·$é.=G;¦ç*lÐú†jÛ‡¤"¡
-t[Ê|
+CS 2112/ENGRD 2112 is an honors version of CS 2110/ENGRD 2110. Credit is given for only one of 2110 and 2112. Transfer between 2110 and 2112 (in either direction) is encouraged during the first three weeks. We cover intermediate software design and introduce some key computer science ideas. The topics are similar to those in 2110 but are covered in greater depth with more challenging assignments. Topics include object-oriented programming, program structure and organization, program reasoning using specifications and invariants, recursion, design patterns, concurrent programming, graphical user interfaces, data structures, sorting and graph algorithms, asymptotic complexity, and simple algorithm analysis. Java is the principal programming language.
