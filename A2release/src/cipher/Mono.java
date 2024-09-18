@@ -7,7 +7,7 @@ public class Mono extends AbstractCipher implements Cipher{
     public String key;
 
     public Mono(String encrAlph){
-        this.key = encrAlph;
+        this.key = encrAlph.toLowerCase();
     }
 
     @Override

@@ -38,13 +38,30 @@ public class Main {
         String cmdFlag = args[pos++];
         switch (cmdFlag) {
             case "--caesar":
-                // TODO create a Caesar cipher object with the given shift parameter
+                cipher = factory.getCaesarCipher(Integer.valueOf(args[pos++]));
                 break;
             case "--random":
-                // TODO create a random substitution cipher object
+                cipher = factory.getRandomSubstitutionCipher();
                 break;
             case "--monoLoad":
-                // TODO load a monoaphabetic substitution cipher from a file
+                try {
+                    BufferedReader reader = new BufferedReader(new FileReader(args[pos++]));
+                    String cipherType = reader.readLine();
+                    if (cipherType.equals("MONO")){
+                        String key = reader.readLine();
+                        cipher = factory.getMonoCipher(key);
+                    } else{
+                        //should have exited from here
+                        System.out.println("ERROR: MONO identifier not found");
+                    }
+
+                } catch (FileNotFoundException e){
+                    //should have exited from here
+                    System.out.println("ERROR: Cipher file not found: " + e.getMessage());
+                } catch (IOException e){
+                    //should have exited from here
+                    System.out.println("ERROR reading file: " + e.getMessage());
+                }
                 break;
             case "--vigenere":
                 cipher = factory.getVigenereCipher(args[pos++]);
@@ -57,12 +74,15 @@ public class Main {
                         String key = reader.readLine();
                         cipher = factory.getVigenereCipher(key);
                     } else{
-                        throw new IllegalArgumentException("Vignere not found");
+                        //should have exited from here
+                        System.out.println("ERROR: VIGENERE identifier not found");
                     }
 
                 } catch (FileNotFoundException e){
+                    //should have exited from here
                     System.out.println("ERROR: Cipher file not found: " + e.getMessage());
                 } catch (IOException e){
+                    //should have exited from here
                     System.out.println("ERROR reading file: " + e.getMessage());
                 }
 
@@ -84,16 +104,20 @@ public class Main {
                         cipher = factory.getRSACipher(e, n, d);
 
                     } else{
-                        throw new IllegalArgumentException("RSA not found");
+                        //should have exited from here
+                        System.out.println("ERROR: RSA identifier not found");
                     }
 
                 } catch (FileNotFoundException e){
+                    //should have exited from here
                     System.out.println("ERROR: Cipher file not found: " + e.getMessage());
                 } catch (IOException e){
+                    //should have exited from here
                     System.out.println("ERROR reading file: " + e.getMessage());
                 }
                 break;
             default:
+                //should have exited from here
                 System.out.println("ERROR: Please specify a cipher type");
         }
         return pos;
