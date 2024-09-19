@@ -50,24 +50,18 @@ public class RSA implements Cipher{
         int counter = 0;
         //read 126 bytes of data at a time plus the length byte, encrypt and write to out
         while (reader.hasNext()){
-            System.out.println(counter++);
             int bytesRead = reader.nextChunk(currentChunk);
             if (bytesRead == 0){
                 break;
             }
 
             BigInteger chunkToEncrypt = new BigInteger(currentChunk);
-            System.out.println("Pre-Encryption Integer");
-            System.out.println(chunkToEncrypt);
 
             BigInteger ciphertext = chunkToEncrypt.modPow(e, n);
             BigInteger instantD = ciphertext.modPow(d, n);
-            System.out.println("After Encryption Integer");
-            System.out.println(ciphertext);
 
             byte[] outputBytes = ciphertext.toByteArray();
             byte[] newArray;
-            System.out.println("LENGTH OF OUTPUT BYTES = " + outputBytes.length);
             if (outputBytes.length < 128) {
 
                 newArray = new byte[128];
@@ -77,7 +71,6 @@ public class RSA implements Cipher{
                 System.arraycopy(outputBytes, 0, newArray, 128-outputBytes.length, outputBytes.length);
                 outputBytes = new byte[128];
                 System.arraycopy(newArray, 0, outputBytes, 0, 128);
-                System.out.println(Arrays.toString(outputBytes));
             }
             out.write(outputBytes);
         }
@@ -94,17 +87,12 @@ public class RSA implements Cipher{
 
         //read 128 bytes of data at a time plus the length byte, encrypt and write to out
         while (reader.hasNext()){
-            System.out.println(counter++);
             int bytesRead = reader.nextChunk(currentChunk);
             if (bytesRead == 0){
                 break;
             }
             BigInteger chunkToDecrypt = new BigInteger(currentChunk);
-            System.out.println("chunk before decrypting");
-            System.out.println(chunkToDecrypt);
             BigInteger decodedBigInteger = chunkToDecrypt.modPow(d, n);
-            System.out.println("Decoded Integer");
-            System.out.println(decodedBigInteger);
             byte[] decodedByteArray = decodedBigInteger.toByteArray();
 
             out.write(Arrays.copyOfRange(decodedByteArray, 1, (int)decodedByteArray[0] + 1));

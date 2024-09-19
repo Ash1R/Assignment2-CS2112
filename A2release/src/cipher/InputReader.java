@@ -49,7 +49,6 @@ public class InputReader implements ChunkReader {
 
         //add padding on the right side if needed
         if (bytesRead < chunkSize - 1 && moreBytes) {
-            System.out.println("WE PAD PLAINTEXT HERE");
             for (int i = bytesRead + 1; i < chunkSize; i++) {
                 data[i] = 0;
             }

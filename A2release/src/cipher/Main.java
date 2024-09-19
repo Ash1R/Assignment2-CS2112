@@ -18,6 +18,8 @@ public class Main {
     OutputStream encrDecrOutputStream;
     InputStream textInputStream;
     String outputFileName;
+
+    //booleans to save command line arguments to be acted upon in execute metho
     boolean encrypt;
     boolean decrypt;
     boolean savingToFile;
@@ -38,14 +40,14 @@ public class Main {
      * the correspoding operations, specifically encryption, decryption, and printing
      * */
     private void execute() {
-
-
+        //if not saving to a file, create a ByteArrayOutputStream
+        //otherwise we would have already created a FileOutputStream (see case for --out)
         if (!savingToFile){
             encrDecrOutputStream = new ByteArrayOutputStream();
         }
 
+        //call encrypt if encrypting
         if (encrypt) {
-
             try {
                 cipher.encrypt(textInputStream, encrDecrOutputStream);
 
@@ -53,18 +55,22 @@ public class Main {
                 System.out.println("ERROR reading input" + e.getMessage());
             }
         }
+
+        //call decrypt if decrypting
         if (decrypt) {
-            try {
-                cipher.decrypt(textInputStream, encrDecrOutputStream);
+            try {cipher.decrypt(textInputStream, encrDecrOutputStream);
             } catch (IOException e) {
                 System.out.println("ERROR reading input" + e.getMessage());
+            } catch (NullPointerException e){
+                System.out.println("ERROR: Cipher was not created");
             }
         }
 
+        //if we saved to a FileOutputStream, call a method to print from a file
         if (savingToFile && printOutput){
             printOutputFile();
 
-        } else if (printOutput){
+        } else if (printOutput){ //otherwise, just use System to print from ByteArray
             try{
                 System.out.println(((ByteArrayOutputStream)encrDecrOutputStream).toString("UTF-8"));
             } catch (UnsupportedEncodingException e) {
@@ -73,6 +79,9 @@ public class Main {
         }
     }
 
+    /**
+     * Prints output that was saved by reading using BufferedReader
+     * */
     private void printOutputFile() {
         try (BufferedReader reader = new BufferedReader(new FileReader(outputFileName))) {
             String line;
@@ -265,9 +274,8 @@ public class Main {
                     savingToFile = true;
                     outputFileName = args[pos++];
                     try {
+                        //create a FileOutputStream because we're writing to a file
                         encrDecrOutputStream = new FileOutputStream(outputFileName);
-                        //fos.write(cipherOutput.toByteArray());
-                        //fos.close();
                     } catch (IOException e) {
                         System.out.println("ERROR writing file:" + e.getMessage());
                     }
