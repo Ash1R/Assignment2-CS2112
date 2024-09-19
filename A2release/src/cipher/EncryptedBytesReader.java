@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.io.IOException;
 import java.io.EOFException;
 import java.io.Reader;
+import java.lang.reflect.Array;
+import java.util.Arrays;
 
 
 public class EncryptedBytesReader implements ChunkReader {
@@ -41,17 +43,6 @@ public class EncryptedBytesReader implements ChunkReader {
         if (bytesRead == -1) {
             moreBytes = false;
             return 0;
-        }
-
-        //slim chance of 127 bytes, in that case, we pad on the left side
-        if (bytesRead < chunkSize && moreBytes){
-            System.out.println("WE PAD HERE");
-            byte[] newArray = new byte[chunkSize];
-            for (int i = 0; i < chunkSize - bytesRead; i++){
-                newArray[i] = 0;
-            }
-            System.arraycopy(data, 0, newArray, chunkSize - bytesRead, bytesRead);
-            System.arraycopy(newArray, 0, data, 0, chunkSize);
         }
 
         return bytesRead;

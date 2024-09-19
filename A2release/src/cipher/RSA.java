@@ -64,7 +64,22 @@ public class RSA implements Cipher{
             BigInteger instantD = ciphertext.modPow(d, n);
             System.out.println("After Encryption Integer");
             System.out.println(ciphertext);
-            out.write(ciphertext.toByteArray());
+
+            byte[] outputBytes = ciphertext.toByteArray();
+            byte[] newArray;
+            System.out.println("LENGTH OF OUTPUT BYTES = " + outputBytes.length);
+            if (outputBytes.length < 128) {
+
+                newArray = new byte[128];
+                for (int i = 0; i < 128 - outputBytes.length; i++){
+                    newArray[i] = 0;
+                }
+                System.arraycopy(outputBytes, 0, newArray, 128-outputBytes.length, outputBytes.length);
+                outputBytes = new byte[128];
+                System.arraycopy(newArray, 0, outputBytes, 0, 128);
+                System.out.println(Arrays.toString(outputBytes));
+            }
+            out.write(outputBytes);
         }
         out.close();
 
