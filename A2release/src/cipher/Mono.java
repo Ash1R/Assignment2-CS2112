@@ -1,7 +1,6 @@
 package cipher;
 
 import java.io.*;
-import java.util.HashMap;
 
 public class Mono extends AbstractCipher implements Cipher{
 
