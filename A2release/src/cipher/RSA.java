@@ -48,6 +48,7 @@ public class RSA implements Cipher{
         byte[] currentChunk = new byte[127];
         InputReader reader = new InputReader(in, 127);
         int counter = 0;
+        //read 126 bytes of data at a time plus the length byte, encrypt and write to out
         while (reader.hasNext()){
             System.out.println(counter++);
             int bytesRead = reader.nextChunk(currentChunk);
@@ -75,6 +76,8 @@ public class RSA implements Cipher{
         byte[] currentChunk = new byte[128];
         EncryptedBytesReader reader = new EncryptedBytesReader(in, 128);
         int counter = 0;
+
+        //read 128 bytes of data at a time plus the length byte, encrypt and write to out
         while (reader.hasNext()){
             System.out.println(counter++);
             int bytesRead = reader.nextChunk(currentChunk);

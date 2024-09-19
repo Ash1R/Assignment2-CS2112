@@ -4,7 +4,13 @@ import java.io.*;
 import java.util.HashMap;
 
 public class Mono extends AbstractCipher implements Cipher{
+
     public String key;
+
+    //alphabet array to help with making keys and decryption
+    public static char[] alphabet = new char[]{'a', 'b', 'c', 'd', 'e', 'f', 'g',
+            'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u',
+            'v', 'w', 'x', 'y', 'z'};
 
     public Mono(String encrAlph){
         this.key = encrAlph.toLowerCase();
@@ -52,10 +58,5 @@ public class Mono extends AbstractCipher implements Cipher{
         out.write(key.toUpperCase().getBytes("UTF-8"));
         out.write("\n".getBytes("UTF-8"));
     }
-
-    public static char[] alphabet = new char[]{'a', 'b', 'c', 'd', 'e', 'f', 'g',
-            'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u',
-            'v', 'w', 'x', 'y', 'z'};
-
 
 }

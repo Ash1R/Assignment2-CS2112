@@ -17,13 +17,73 @@ import java.nio.file.Path;
  */
 public class Main {
     Cipher cipher;
-    ByteArrayOutputStream cipherOutput = new ByteArrayOutputStream();
+    OutputStream encrDecrOutputStream;
+    InputStream textInputStream;
+    String outputFileName;
+    boolean encrypt;
+    boolean decrypt;
+    boolean savingToFile;
+    boolean printOutput;
+
     public static void main(String[] args) {
+        //parse command line args
         int pos = 0;
         Main program = new Main();
         pos = program.parseCipherType(args, pos);
         pos = program.parseCipherFunction(args, pos);
         pos = program.parseOutputOptions(args, pos);
+        program.execute();
+    }
+
+    /**
+     * Reads boolean variables edited in response to command line argyments and carries out
+     * the correspoding operations, specifically encryption, decryption, and printing
+     * */
+    private void execute() {
+
+
+        if (!savingToFile){
+            encrDecrOutputStream = new ByteArrayOutputStream();
+        }
+
+        if (encrypt) {
+
+            try {
+                cipher.encrypt(textInputStream, encrDecrOutputStream);
+
+            }  catch (IOException e) {
+                System.out.println("ERROR reading input" + e.getMessage());
+            }
+        }
+        if (decrypt) {
+            try {
+                cipher.decrypt(textInputStream, encrDecrOutputStream);
+            } catch (IOException e) {
+                System.out.println("ERROR reading input" + e.getMessage());
+            }
+        }
+
+        if (savingToFile && printOutput){
+            printOutputFile();
+
+        } else if (printOutput){
+            try{
+                System.out.println(((ByteArrayOutputStream)encrDecrOutputStream).toString("UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+                System.out.println("ERROR UTF-8 not supported for this output: " + e.getMessage());
+            }
+        }
+    }
+
+    private void printOutputFile() {
+        try (BufferedReader reader = new BufferedReader(new FileReader(outputFileName))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+        } catch (IOException e) {
+            System.err.println("Error reading the file: " + e.getMessage());
+        }
     }
 
     /**
@@ -47,6 +107,7 @@ public class Main {
                 try {
                     BufferedReader reader = new BufferedReader(new FileReader(args[pos++]));
                     String cipherType = reader.readLine();
+                    //only create cipher if first line of file matches with intended ciphertype
                     if (cipherType.equals("MONO")){
                         String key = reader.readLine();
                         cipher = factory.getMonoCipher(key);
@@ -70,6 +131,7 @@ public class Main {
                 try {
                     BufferedReader reader = new BufferedReader(new FileReader(args[pos++]));
                     String cipherType = reader.readLine();
+                    //only create cipher if first line of file matches with intended ciphertype
                     if (cipherType.equals("VIGENERE")){
                         String key = reader.readLine();
                         cipher = factory.getVigenereCipher(key);
@@ -95,6 +157,8 @@ public class Main {
                 try {
                     BufferedReader reader = new BufferedReader(new FileReader(args[pos++]));
                     String cipherType = reader.readLine();
+
+                    //only create cipher if first line of file matches with intended ciphertype
                     if (cipherType.equals("RSA")){
                         BigInteger d = new BigInteger(reader.readLine());
                         BigInteger e = new BigInteger(reader.readLine());
@@ -133,44 +197,43 @@ public class Main {
 
         switch (args[pos++]) {
             case "--em":
+                encrypt = true;
                 try {
-                    cipherOutput.write(cipher.encrypt(args[pos++]).getBytes("UTF-8"));
-                } catch (IOException e) {
-                    System.out.println("ERROR writing file: " + e.getMessage());
+                    textInputStream = new ByteArrayInputStream(args[pos++].getBytes("UTF-8"));
+                } catch (UnsupportedEncodingException e) {
+                    System.out.println("UTF-8 not supported for provided characters");
                 }
+
                 break;
             case "--ef":
-                // TODO encrypt the contents of the given file
+
                 try {
-                    InputStream in = new FileInputStream(args[pos++]);
-                    cipher.encrypt(in, cipherOutput);
+                    textInputStream = new FileInputStream(args[pos++]);
+                    //records flag for encryption
+                    encrypt = true;
+                    //cipher.encrypt(in, cipherOutput);
 
 
                 } catch (FileNotFoundException e) {
                     System.out.println("ERROR file not found: " + e.getMessage());
-                } catch (IOException e) {
-                    System.out.println("ERROR reading input" + e.getMessage());
                 }
                 break;
             case "--dm":
+                decrypt = true;
                 try {
-                    cipherOutput.write(cipher.decrypt(args[pos++]).getBytes("UTF-8"));
-                } catch (IOException e) {
-                    System.out.println("ERROR writing file: " + e.getMessage());
-                } catch (NullPointerException e){
-                    System.out.println("Cipher not found! Make sure you are loading from the right file, or one that exists.");
+                    textInputStream = new ByteArrayInputStream(args[pos++].getBytes("UTF-8"));
+                } catch (UnsupportedEncodingException e) {
+                    System.out.println("UTF-8 not supported for provided characters");
                 }
                 break;
             case "--df":
-                // TODO decrypt the contents of the given file
                 try {
-                    InputStream in = new FileInputStream(args[pos++]);
-
-                    cipher.decrypt(in, cipherOutput);
+                    textInputStream = new FileInputStream(args[pos++]);
+                    //records flag for decryption
+                    decrypt = true;
+                    //cipher.decrypt(in, cipherOutput);
                 } catch (FileNotFoundException e) {
                     System.out.println("ERROR file not found: " + e.getMessage());
-                } catch (IOException e) {
-                    System.out.println("ERROR reading input" + e.getMessage());
                 }
                 break;
             default:
@@ -196,31 +259,25 @@ public class Main {
         while (pos < args.length) {
             switch (cmdFlag = args[pos++]) {
                 case "--print":
-                    // TODO print result of applying the cipher to the console -- substitution
                     // ciphers only
-                    try{
-                        System.out.println(cipherOutput.toString("UTF-8"));
-
-                    } catch (UnsupportedEncodingException e) {
-                        System.out.println("ERROR UTF-8 not supported: " + e.getMessage());
-                    }
+                    //records desire to print
+                    printOutput = true;
                     break;
                 case "--out":
-                    filename = args[pos++];
+                    savingToFile = true;
+                    outputFileName = args[pos++];
                     try {
-                        FileOutputStream fos = new FileOutputStream(filename);
-                        fos.write(cipherOutput.toByteArray());
-                        fos.close();
-
-
+                        encrDecrOutputStream = new FileOutputStream(outputFileName);
+                        //fos.write(cipherOutput.toByteArray());
+                        //fos.close();
                     } catch (IOException e) {
                         System.out.println("ERROR writing file:" + e.getMessage());
                     }
                     break;
                 case "--save":
-                    filename = args[pos++];
-                    System.out.println(filename);
                     try {
+                        filename = args[pos++];
+
                         OutputStream out = new FileOutputStream(filename);
                         try {
                             cipher.save(out);
@@ -229,13 +286,14 @@ public class Main {
                         }
                     } catch (FileNotFoundException e){
                         System.out.println("ERROR: File not found: " + e.getMessage());
+                    } catch (ArrayIndexOutOfBoundsException e){
+                        System.out.println("ERROR: File not found to save to");
                     } catch (IOException e) {
-                       System.out.println("ERROR reading file:" + e.getMessage());
+                        System.out.println("ERROR reading file:" + e.getMessage());
                     }
                     break;
                 default:
 
-                    // TODO
             }
         }
         return pos;

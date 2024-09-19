@@ -10,6 +10,7 @@ public class Random extends Mono{
         this.key = randomize();
     }
 
+    //create a new random key
     public String randomize(){
         char[] map = new char[26];
         for(int i = 0; i < 26; i++){
@@ -25,8 +26,5 @@ public class Random extends Mono{
         String stringKey =new String(map);
         return stringKey;
     }
-
-
-
 
 }

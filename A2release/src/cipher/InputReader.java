@@ -35,11 +35,10 @@ public class InputReader implements ChunkReader {
             throw new EOFException("No more bytes available.");
         }
 
+        //leave space to add the size of what was read as first byte
         int bytesRead = stream.read(data, 1, chunkSize - 1);
 
-
-
-
+        //add the amount of bytes read into first byte
         data[0] = (byte)bytesRead;
 
 
@@ -48,6 +47,7 @@ public class InputReader implements ChunkReader {
             return 0;
         }
 
+        //add padding on the right side if needed
         if (bytesRead < chunkSize - 1 && moreBytes) {
             for (int i = bytesRead + 1; i < chunkSize; i++) {
                 data[i] = 0;
@@ -58,8 +58,5 @@ public class InputReader implements ChunkReader {
         return bytesRead;
     }
 
-    public void close() throws IOException {
-        stream.close();
-    }
 
 }

@@ -12,15 +12,16 @@ public class Vigenere extends AbstractCipher implements Cipher {
     }
 
 
-
     @Override
     public String encrypt(String plaintext) {
+        //enforce lowercase invariant
         plaintext = filterNonAlphabetic(plaintext.toLowerCase());
         if (key.equals("")){
             return plaintext;
         }
-
         String ciphertext = "";
+        //charParsedCount keeps track of how many non-whitespace characters we've parsed, since we
+        //do not apply the Vigenere algorithm to whitespace
         int charParsedCount = 0;
         for (int i = 0; i < plaintext.length(); i++) {
             char plainChar = plaintext.charAt(i);
@@ -36,11 +37,14 @@ public class Vigenere extends AbstractCipher implements Cipher {
 
     @Override
     public String decrypt(String ciphertext) {
+        //enforce lowercase invariantx
         ciphertext = filterNonAlphabetic(ciphertext.toLowerCase());
         if (key.equals("")){
             return ciphertext;
         }
         String plaintext = "";
+        //charParsedCount keeps track of how many non-whitespace characters we've parsed, since we
+        //do not apply the Vigenere algorithm to whitespace
         int charParsedCount = 0;
         for (int i = 0; i < ciphertext.length(); i++) {
             char cipherChar = ciphertext.charAt(i);

@@ -35,6 +35,7 @@ public class EncryptedBytesReader implements ChunkReader {
             throw new EOFException("No more bytes available.");
         }
 
+        //read entire 128 byte chunk
         int bytesRead = stream.read(data, 0, chunkSize);
 
         if (bytesRead == -1) {
@@ -42,7 +43,9 @@ public class EncryptedBytesReader implements ChunkReader {
             return 0;
         }
 
+        //slim chance of 127 bytes, in that case, we pad on the left side
         if (bytesRead < chunkSize && moreBytes){
+            System.out.println("WE PAD HERE");
             byte[] newArray = new byte[chunkSize];
             for (int i = 0; i < chunkSize - bytesRead; i++){
                 newArray[i] = 0;
@@ -54,8 +57,5 @@ public class EncryptedBytesReader implements ChunkReader {
         return bytesRead;
     }
 
-    public void close() throws IOException {
-        stream.close();
-    }
 
 }
