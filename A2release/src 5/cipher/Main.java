@@ -53,8 +53,6 @@ public class Main {
 
             }  catch (IOException e) {
                 System.out.println("ERROR reading input" + e.getMessage());
-            } catch (NullPointerException e){
-                System.out.println("ERROR: Cipher was not created");
             }
         }
 
